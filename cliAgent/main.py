@@ -1,30 +1,29 @@
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import openai
 import gradio as gr
 
-# טוען את משתני הסביבה
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+# Load environment variables
+api_key = os.environ["OPENAI_API_KEY"]
 
-# יצירת client עם פרוקסי
+# Create client with a proxy
 client = openai.OpenAI(
     api_key=api_key,
-    base_url="https://proxy.aiwall.org"  # משתמש בפרוקסי
+    base_url="https://proxy.aiwall.org"  # Uses a proxy
 )
 
-# קריאה של קובץ ה-Markdown עם ההנחיות
+# Read the Markdown file containing the instructions
 try:
     with open("instarction2.md", "r", encoding="utf-8") as f:
-    instructions = f.read()
+        instructions = f.read()
 except FileNotFoundError:
     instructions = "You are a helpful assistant."
 
-# פונקציה לשאילת שאלות למודל
+# Function to query the model
 def ask_openai(prompt):
     try:
         response = client.chat.completions.create(
-            model="gpt-4.1",  # בחר מודל זמין מהרשימה שלך
+            model="gpt-4.1", 
                   messages=[
                 {"role": "system", "content": instructions},
                 {"role": "user", "content": prompt}
@@ -34,13 +33,13 @@ def ask_openai(prompt):
     except Exception as e:
         return f"Error: {str(e)}"
 
-# ממשק Gradio
+# Gradio Interface
 iface = gr.Interface(
     fn=ask_openai,
-    inputs=gr.Textbox(lines=5, placeholder="כתוב כאן את השאלה שלך..."),
-    outputs=gr.Textbox(label="תשובה מהמודל"),
-    title="OpenAI Chat דרך פרוקסי",
-    description="ממשק לשאילת שאלות למודל OpenAI דרך פרוקסי"
+    inputs=gr.Textbox(lines=5, placeholder="Type your question here..."),
+    outputs=gr.Textbox(label="Model Response"),
+    title="NaturalCLI Chat",
+    description="Converts natural language input into CLI commands."
 )
 
 if __name__ == "__main__":
