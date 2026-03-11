@@ -2,9 +2,9 @@ name: Keep Hugging Face Space Alive
 
 on:
   schedule:
-    # ירוץ כל 24 שעות
+    # רץ כל 24 שעות ב-00:00 בלילה
     - cron: '0 0 * * *'
-  workflow_dispatch: # מאפשר לך להריץ ידנית לבדיקה
+  workflow_dispatch: # מאפשר הרצה ידנית
 
 jobs:
   ping:
@@ -12,5 +12,4 @@ jobs:
     steps:
       - name: Wake up Space
         run: |
-          # החליפי את ה-URL למטה בכתובת ה-Space האמיתית שלך
-          curl -I https://huggingface.co/spaces/Rivki-Karp/NaturalCLI
+          curl -I https://rivka-karp-naturalcli.hf.space
